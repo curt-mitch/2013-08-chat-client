@@ -1,4 +1,5 @@
 if(!/(&|\?)username=/.test(window.location.search)){
+  //allows us to access to window['location']['search'] = 'username=' + promptvalue...
   var newSearch = window.location.search;
   if(newSearch !== '' & newSearch !== '?'){
     newSearch += '&';
