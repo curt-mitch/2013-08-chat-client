@@ -4,11 +4,16 @@
     success: function(data){
       _.each(data.results, function(userData) {
         var username = userData.username || 'visitor';
-        var message = userData.text;
         var date = moment(userData.createdAt).fromNow();
-        $(messages).append(username + ': ' + message + ', ' + date +  '<br>');
-        console.log(userData);
+        var message = username + ': ' + userData.text + ', ' + date;
+
+        $('#messages').append($('<span/>').text(message).append('<br>'));
+          console.log(userData);
       });
+    },
+    error: function(data) {
+      console.log('Ajax request failed </3');
     }
   });
 
+//
