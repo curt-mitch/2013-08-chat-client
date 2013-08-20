@@ -3,6 +3,7 @@ $(document).ready(function() {
   var userMessage;
   var friends = {};
   var mostRecent = '2013-08-20T02:08:09.042Z';
+  var room = {};
 
   $.ajax('https://api.parse.com/1/classes/messages?order=-createdAt&where={"createdAt":{"$gte":{"__type":"Date","iso":"'+ mostRecent +'"}}}', {
     contentType: 'application/json',
@@ -12,10 +13,16 @@ $(document).ready(function() {
         var username = userData.username || 'visitor';
         var date = moment(userData.createdAt).fromNow();
         var message = username + ': ' + userData.text + ', ' + date;
-        //use room property /filter
+
+        if (userData.hasOwnProperty('roomname')) {
+          room[userData.roomname] = userData.roomname;
+        }
+
         $('#messages').append($('<div class="messageContainer"/>').data('username', username).text(message));
       });
       setUpFriends();
+      showRooms();
+      setUpRooms(data);
     },
     error: function(data) {
       console.log('Ajax request failed </3');
@@ -62,4 +69,30 @@ $(document).ready(function() {
       }
     });
   };
+
+  var showRooms = function() {
+    _.each(room, function(val, key) {
+      $('#roomContainer').append($('<div class="roomname" />').data('room', key).text(val));
+    });
+  };
+
+  var setUpRooms = function(data) {
+    $('.roomname').on('click', function() {
+      var roomname = $(this).data().room;
+
+      $('#messages').html('');
+      _.each(data.results, function(userData) {
+        var username = userData.username || 'visitor';
+        var date = moment(userData.createdAt).fromNow();
+        var message = username + ': ' + userData.text + ', ' + date;
+
+        if (userData.hasOwnProperty('roomname')) {
+          if (userData['roomname'] === roomname) {
+             $('#messages').append($('<div class="messageContainer"/>').text(message));
+          }
+        }
+      });
+    });
+  };
+
 });
