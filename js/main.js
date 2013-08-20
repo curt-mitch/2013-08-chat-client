@@ -43,7 +43,7 @@ $(document).ready(function() {
     $.ajax('https://api.parse.com/1/classes/messages', {
       contentType: 'application/json',
       type: 'POST',
-      data: messageData,
+      data: JSON.stringify(messageData),
       success: function(){
         console.log('Success!!!');
       }
