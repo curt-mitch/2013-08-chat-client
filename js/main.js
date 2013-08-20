@@ -1,9 +1,7 @@
 $(document).ready(function() {
   var user;
   var userMessage;
-
-  // where={"createdAt":{"$gte":{"__type":"Date","iso":"2011-08-21T18:02:52.249Z"}}}
-
+  var friends = {};
   var mostRecent = '2013-08-20T02:08:09.042Z';
 
   $.ajax('https://api.parse.com/1/classes/messages?order=-createdAt&where={"createdAt":{"$gte":{"__type":"Date","iso":"'+ mostRecent +'"}}}', {
@@ -15,9 +13,10 @@ $(document).ready(function() {
         var date = moment(userData.createdAt).fromNow();
         var message = username + ': ' + userData.text + ', ' + date;
 
-        $('#messages').append($('<span/>').text(message).append('<br>'));
+        $('#messages').append($('<div class="messageContainer"/>').data('username', username).text(message));
           console.log(userData);
       });
+      setUpFriends();
     },
     error: function(data) {
       console.log('Ajax request failed </3');
@@ -48,6 +47,15 @@ $(document).ready(function() {
       }
     });
   };
+
+  var setUpFriends = function() {
+    $('.messageContainer').on('click', function() {
+      var dataAttr = $(this).data().username;
+      friends[dataAttr] = dataAttr;
+    });
+  };
+
+
 
   //when user clicks username,add to friend set with friend[username] = username
   // for each username in set, make messages bold font 
