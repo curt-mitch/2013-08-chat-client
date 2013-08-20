@@ -12,9 +12,8 @@ $(document).ready(function() {
         var username = userData.username || 'visitor';
         var date = moment(userData.createdAt).fromNow();
         var message = username + ': ' + userData.text + ', ' + date;
-
+        //use room property /filter
         $('#messages').append($('<div class="messageContainer"/>').data('username', username).text(message));
-          console.log(userData);
       });
       setUpFriends();
     },
