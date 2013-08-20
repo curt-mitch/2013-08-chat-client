@@ -52,11 +52,15 @@ $(document).ready(function() {
     $('.messageContainer').on('click', function() {
       var dataAttr = $(this).data().username;
       friends[dataAttr] = dataAttr;
+      selectFriends();
     });
   };
 
-
-
-  //when user clicks username,add to friend set with friend[username] = username
-  // for each username in set, make messages bold font 
+  var selectFriends = function() {
+    $.each($('.messageContainer'), function(index, el) {
+      if (friends[$(el).data().username]) {
+        $(this).wrap('<strong/>');
+      }
+    });
+  };
 });
