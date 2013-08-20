@@ -6,7 +6,7 @@ $(document).ready(function() {
       newSearch += '&';
     }
 
-    newSearch += 'username=' + (userChatBuilder || 'anonymous');
+    newSearch += 'username=' + prompt('wat yo name?') || 'anonymous';
     window.location.search = newSearch;
   }
 });
