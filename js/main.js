@@ -1,16 +1,15 @@
-//var userID = (window.location.search).slice((window.location.search).indexOf("=") + 1);
-
-//create HTML nodes to hold chat data from server
-
-//string.slice(beginslice[, endSlice])
-
 $(document).ready(function() {
   var user;
   var userMessage;
 
-  $.ajax('https://api.parse.com/1/classes/messages', {
+  // where={"createdAt":{"$gte":{"__type":"Date","iso":"2011-08-21T18:02:52.249Z"}}}
+
+  var mostRecent = '2013-08-20T02:08:09.042Z';
+
+  $.ajax('https://api.parse.com/1/classes/messages?order=-createdAt&where={"createdAt":{"$gte":{"__type":"Date","iso":"'+ mostRecent +'"}}}', {
     contentType: 'application/json',
     success: function(data){
+      mostRecent = data.results[0].createdAt;
       _.each(data.results, function(userData) {
         var username = userData.username || 'visitor';
         var date = moment(userData.createdAt).fromNow();
@@ -49,4 +48,7 @@ $(document).ready(function() {
       }
     });
   };
+
+  //when user clicks username,add to friend set with friend[username] = username
+  // for each username in set, make messages bold font 
 });
