@@ -2,17 +2,17 @@ $(document).ready(function() {
   var user;
   var userMessage;
   var friends = {};
-  var mostRecent = '2013-08-20T02:08:09.042Z';
+  var mostRecent = '2013-08-26T02:08:09.042Z';
   var room = {};
 
-  $.ajax('https://api.parse.com/1/classes/messages?order=-createdAt&where={"createdAt":{"$gte":{"__type":"Date","iso":"'+ mostRecent +'"}}}', {
+  $.ajax('http://127.0.0.1:8000/1/classes/messages', {
     contentType: 'application/json',
     success: function(data){
-      mostRecent = data.results[0].createdAt;
-      _.each(data.results, function(userData) {
+      _.each(data, function(userData) {
         var username = userData.username || 'visitor';
+        var text = userData.text;
         var date = moment(userData.createdAt).fromNow();
-        var message = username + ': ' + userData.text + ', ' + date;
+        var message = username + ': ' + text + ', ' + date;
 
         if (userData.hasOwnProperty('roomname')) {
           room[userData.roomname] = userData.roomname;
@@ -31,7 +31,7 @@ $(document).ready(function() {
 
   $('#chatbutton').on('click', function() {
     user = $('#userForm').val();
-    userMessage = $('#inputmessage').val();
+    userMessage = $('#inputmessage').val() || "visitor";
     var data = messageData(user, userMessage);
     postMessage(data);
   });
@@ -44,7 +44,7 @@ $(document).ready(function() {
   };
 
   var postMessage = function(messageData){
-    $.ajax('https://api.parse.com/1/classes/messages', {
+    $.ajax('http://127.0.0.1:8000/1/classes/messages', {
       contentType: 'application/json',
       type: 'POST',
       data: JSON.stringify(messageData),
